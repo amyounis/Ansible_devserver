@@ -1,0 +1,11 @@
+---
+- name: dev server provisioning
+  hosts: all
+  gather_facts: no
+
+  pre_tasks:
+  - name: Make sure python 2 is installed
+    raw: ( test -e /usr/bin/python || (apt -y update && apt install -y python-minimal) )
+    # python-simplejson
+    # python-minimal
+    become: yes
