@@ -1,0 +1,3 @@
+---
+# defaults file for time_sync
+time_zone_config: "Africa/Cairo"

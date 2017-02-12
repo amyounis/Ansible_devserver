@@ -1,0 +1,27 @@
+
+. Common
+.. Python
+.. Git
+.. mosh
+.. tmux
+.. byobu
+.. vim
+.. svn
+.. docker
+.. docker compose
+. NodeJS
+.. custom PPA
+.. node js + npm
+. Java
+.. Custom PPA
+.. JDK 8
+. Maven
+.. vars: List of maven versions
+. Users
+.. Vars: list of users
+.. Public ssh keys
+.. script to generate keys
+.. add user to system
+.. add each user key to their authorized keys file
+. Time sync
+.. Orange NTP time server

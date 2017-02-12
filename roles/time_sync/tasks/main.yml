@@ -1,0 +1,44 @@
+---
+# tasks file for time_sync
+
+- name: Update apt cache.
+  apt: update_cache=yes cache_valid_time=86400
+  become: yes
+
+- name: Ensure NTP daemon (for time synchronization) is installed.
+  apt: name=ntp state=present
+  become: yes
+
+- name: Ensure NTP is running.
+  service: name=ntp state=started enabled=yes
+  become: yes
+
+#- name: List ntp entries in /etc/ntp.conf
+#  shell: cat /etc/ntp.conf | grep '^server ' | cut -f2 -d' '
+#  changed_when: False
+#  register: ontpCurrentList
+#
+#- name: Comment ntp entries not defined by the role
+#  replace: dest=/etc/ntp.conf regexp='^server {{ item }}(\s+.*)?$' replace='{{ ontpRoleComment }} server {{ item }}\1'
+#  with_items: '{{ ontpCurrentList.stdout_lines|difference(ontpListUnion) }}'
+#  notify: ntp restart
+#
+#- name: Add ntp entries
+#  lineinfile: dest=/etc/ntp.conf regexp='.*server {{ item.key }} {{ ontpRoleComment }}$' line='server {{ item.key }} {{ ontpRoleComment }}' state=present
+#  with_dict: '{{ ontpListUnion }}'
+#  notify: ntp restart
+#
+
+# TODO: For some reason this reports status changed everytime the playbook is run!
+#  copy: content='{{ time_zone_config }}' 
+- name: Set timezone variables
+  copy: src=etc_timezone
+        dest=/etc/timezone
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
+  become: yes
+  notify:
+    - update timezone
+

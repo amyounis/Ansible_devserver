@@ -1,0 +1,10 @@
+---
+- name: dev server provisioning
+  hosts: all
+#  pre_tasks:
+#  - raw: sudo apt -y install python-simplejson
+#  tasks:
+  roles:
+#  - common
+  - time_sync
+

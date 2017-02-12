@@ -1,0 +1,6 @@
+---
+# handlers file for time_sync
+
+- name: update timezone
+  command: dpkg-reconfigure --frontend noninteractive tzdata 
+
