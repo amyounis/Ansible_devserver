@@ -5,6 +5,7 @@
   tasks:
 
   roles:
-#  - common
-  - time_sync
+  - Common
+  - Java
+#  - time_sync
 

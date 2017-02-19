@@ -6,7 +6,7 @@
   become: yes
 
 - name: Install Python
-  apt: name=Python state=latest
+  apt: name=python state=latest
   become: yes
 
 - name: Install Git
@@ -36,7 +36,7 @@
 # this section for docker prerequisites and adding docker repository
 ####################################################################
 
-- name: HTTPS APT transport for Docker repository
+- name: Install apt-transport-https for apt to be able to use repository over https
   apt: name=apt-transport-https state=present
   become: yes
 
