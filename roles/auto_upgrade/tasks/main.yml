@@ -1,0 +1,19 @@
+---
+# this task for running aptitude -y safe-upgrade every day 1:00 AM
+
+- name: ensure required packages are installed aptitude
+  apt:
+   name:
+    - python
+    - python3
+    - aptitude
+   state: latest
+  become: yes
+
+- cron:
+    name: auto_upgrade
+    hour: 1
+    job: "(/usr/bin/aptitude -y update && /usr/bin/aptitude -y safe-upgrade) 2>&1 >> /var/log/auto_update.log"
+    user: root
+    cron_file: auto_upgrade
+  become: yes
