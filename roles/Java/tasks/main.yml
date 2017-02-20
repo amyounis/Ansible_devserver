@@ -1,24 +1,36 @@
 ---
 # Install latest Oracle Java Jdk 8
 
-- name: ensure required packages are installed for Java 8
+- name: ensure required packages are installed for Java
   apt:
    name: python-software-properties
    state: latest
 
-- name: Add Java repository to sources
+- name: Add Java repository to sources list
   apt_repository:
     repo: 'ppa:webupd8team/java'
     update_cache: yes
 
-- name: Autoaccept license for Java
+- name: Autoaccept license for Java 7
+  debconf:
+   name: 'oracle-java7-installer'
+   question: 'shared/accepted-oracle-license-v1-1'
+   value: 'true'
+   vtype: 'select'
+
+- name: Install Oracle Java Jdk 7
+  apt:
+   name: oracle-java7-installer
+   state: latest
+
+- name: Autoaccept license for Java 8
   debconf:
    name: 'oracle-java8-installer'
    question: 'shared/accepted-oracle-license-v1-1'
    value: 'true'
    vtype: 'select'
 
-- name: Install Java 8
+- name: Install Oracle Java Jdk 8
   apt:
    name: oracle-java8-installer
    state: latest
