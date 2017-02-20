@@ -12,6 +12,8 @@
 . NodeJS
 .. custom PPA
 .. node js + npm
+. Automatic upgrades
+.. Safe upgrades, security patches
 . Java
 .. Custom PPA
 .. JDK 8
