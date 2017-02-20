@@ -5,4 +5,3 @@ ole
 
 [devservers:vars]
 ansible_ssh_user=ole
-javaversions='["java7", "java8"]'
