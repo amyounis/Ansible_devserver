@@ -23,3 +23,9 @@
   apt: name="oracle-{{item}}-installer" state=latest
   with_items: "{{javaversions}}"
   become: yes
+
+#- name: Add JAVA UTF-8 Environment Variable
+#  lineinfile:
+#    dest: /etc/environment
+#    line: JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
+#  become: yes

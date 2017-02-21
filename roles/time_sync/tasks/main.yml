@@ -42,3 +42,8 @@
   notify:
     - update timezone
 
+# TODO: Add the time servers to the ntpd configuration file
+#- name: Ensure Orange timeservers are set
+#  lineinfile:
+#    dest: /etc/ntp.conf
+#    line:
