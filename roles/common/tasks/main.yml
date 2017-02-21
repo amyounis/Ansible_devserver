@@ -1,37 +1,6 @@
 ---
 # Install Python, Git, mosh, tmux, byobu,vim, subversion, docker, docker compose
 
-- name: Update apt cache.
-  apt: update_cache=yes cache_valid_time=86400
-  become: yes
-
-- name: Install Python
-  apt: name=python state=latest
-  become: yes
-
-- name: Install Git
-  apt: name=git state=latest
-  become: yes
-
-- name: Install mosh
-  apt: name=mosh state=latest
-  become: yes
-
-- name: Install tmux
-  apt: name=tmux state=latest
-  become: yes
-
-- name: Install byobu
-  apt: name=byobu state=latest
-  become: yes
-
-- name: Install vim
-  apt: name=vim state=latest
-  become: yes
-
-- name: Install subversion
-  apt: name=subversion state=latest
-  become: yes
 
 # this section for docker prerequisites and adding docker repository
 ####################################################################
@@ -59,10 +28,17 @@
 ####################################################################
 ####################################################################
 
-- name: Install docker-engine
-  apt: name=docker-engine state=latest
-  become: yes
-
-- name: Install docker compose
-  apt: name=docker-compose state=latest
+- name: Install Python, Git, mosh, tmux, byobu,vim, subversion, docker, docker compose
+  apt:
+   name:
+    - python
+    - git
+    - mosh
+    - tmux
+    - byobu
+    - vim
+    - subversion
+    - docker-engine
+    - docker-compose
+   state: latest
   become: yes

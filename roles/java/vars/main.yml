@@ -1,5 +1,2 @@
 ---
 # vars file for Java
-
-javaversions:
-  - java8

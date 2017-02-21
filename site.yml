@@ -3,13 +3,15 @@
   hosts: all
 
   vars:
-    javaversions:
-      - java7
-      - java8
+   javaversions:
+    - java7
+    - java8
+
   tasks:
 
   roles:
-#  - Common
-  - Java
+   - common
+   - auto_upgrade
+   - java
 #  - time_sync
 
