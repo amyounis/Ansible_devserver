@@ -1,9 +1,15 @@
 ---
-# Install Python, Git, mosh, tmux, byobu,vim, subversion, docker, docker compose
+#################################################################################
+#     Common role for installing common packages and set locale and ulimits     #
+#################################################################################
 
+- name: Update apt cache.
+  apt: update_cache=yes cache_valid_time=86400
+  become: yes
 
-# this section for docker prerequisites and adding docker repository
-####################################################################
+######################################################################
+# this section for docker prerequisites and adding docker repository #
+######################################################################
 
 - name: Install apt-transport-https for apt to be able to use repository over https
   apt: name=apt-transport-https state=present
@@ -25,8 +31,9 @@
     update_cache: yes
   become: yes
 
-####################################################################
-####################################################################
+##################################################################################
+# Install Python, Git, mosh, tmux, byobu,vim, subversion, docker, docker compose #
+##################################################################################
 
 - name: Install Python, Git, mosh, tmux, byobu,vim, subversion, docker, docker compose
   apt:
@@ -43,39 +50,61 @@
    state: latest
   become: yes
 
-#- name: Set the open files per process limit (system wide)
-#  sysctl: name=fs.file-max value={{ nofile_limit }} state=present
-#
-#- name: Set the open files per process limit
-#  lineinfile:
-#    dest: /etc/security/limits.conf
-#    regexp: ^root hard nofile
-#    line: root hard nofile {{ nofile_limit }}
-#
-#- name: Set the memory limit
-#  lineinfile:
-#    dest: /etc/security/limits.conf
-#    regexp: ^root hard memlock
-#    line: root hard memlock {{ memlock_limit }}
-#
-#- name: Set the no of process limit
-#  lineinfile:
-#    dest: /etc/security/limits.conf
-#    regexp: ^root hard nproc
-#    line: root hard nproc {{ nproc_limit }}
-#
-#- name: Set the address space limit
-#  lineinfile:
-#    dest: /etc/security/limits.conf
-#    regexp: ^root hard as
-#    line: root hard as {{ addrspace_limit }}
+##########################################################
+#                     Set ulimits                        #
+##########################################################
 
-#- name: Add JAVA UTF-8 Environment Variable
-#  lineinfile:
-#    dest: /etc/environment
-#    line:
-#  become: yes
-#
-#LC_ALL=en_US.UTF-8
-#LANG=en_US.UTF-8
-#LC_CTYPE=en_US.UTF-8
+- name: Set ulimits "memlock" - max locked-in-memory address space (KB)
+  pam_limits: domain=root limit_type='-' limit_item=memlock value=unlimited backup=yes
+  become: yes
+
+- name: Set ulimits "nofile" - max number of open files
+  pam_limits: domain=root limit_type='-' limit_item=nofile value=unlimited backup=yes
+  become: yes
+
+- name: Set ulimits "nproc" - max number of processes
+  pam_limits: domain=root limit_type='-' limit_item=nproc value=unlimited backup=yes
+  become: yes
+
+- name: Set ulimits "as" - address space limit (KB)
+  pam_limits: domain=root limit_type='-' limit_item=as value=unlimited backup=yes
+  become: yes
+
+#        - core - limits the core file size (KB)
+#        - data - max data size (KB)
+#        - fsize - maximum filesize (KB)
+#        - memlock - max locked-in-memory address space (KB)
+#        - nofile - max number of open files
+#        - rss - max resident set size (KB)
+#        - stack - max stack size (KB)
+#        - cpu - max CPU time (MIN)
+#        - nproc - max number of processes
+#        - as - address space limit (KB)
+#        - maxlogins - max number of logins for this user
+#        - maxsyslogins - max number of logins on the system
+#        - priority - the priority to run user process with
+#        - locks - max number of file locks the user can hold
+#        - sigpending - max number of pending signals
+#        - msgqueue - max memory used by POSIX message queues (bytes)
+#        - nice - max nice priority allowed to raise to values: [-20, 19]
+#        - rtprio - max realtime priority
+#        - chroot - change root to directory (Debian-specific)
+
+# Note: although /etc/security/limits.conf changed but, it has no effect even after re-login
+# this issue because Ubuntu, and mongodb is started by upstart not initd , then changing
+# these limits will not affect mongodb. As upstart does not read /etc/security config
+# also there is some limits that should not be changed like nproc (i think)
+#########################################################
+#                    Stetting locale                    #
+#########################################################
+
+- name: Generate en_US.UTF-8 locale
+  command: locale-gen en_US.UTF-8
+  become: yes
+# there is a module called locale_gen but i tried and it didnt change the file /etc/locale.gin
+# as it should do
+
+- name: Set locale "en_US.UTF-8"
+  template: src=locale.j2 dest=/etc/default/locale
+  become: yes
+

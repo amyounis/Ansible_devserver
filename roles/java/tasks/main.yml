@@ -1,5 +1,10 @@
 ---
 # Install latest Oracle Java Jdk 7 and Jdk 8
+#############################################
+
+- name: Update apt cache.
+  apt: update_cache=yes cache_valid_time=86400
+  become: yes
 
 - name: ensure required packages are installed for ppa repositories and for debconf
   apt:
@@ -24,8 +29,9 @@
   with_items: "{{javaversions}}"
   become: yes
 
-#- name: Add JAVA UTF-8 Environment Variable
-#  lineinfile:
-#    dest: /etc/environment
-#    line: JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
-#  become: yes
+
+- name: Add JAVA UTF-8 Environment Variable
+  lineinfile:
+    dest: /etc/environment
+    line: JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
+  become: yes

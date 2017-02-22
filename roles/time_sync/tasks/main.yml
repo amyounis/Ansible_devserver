@@ -1,5 +1,6 @@
 ---
 # tasks file for time_sync
+###########################
 
 - name: Update apt cache.
   apt: update_cache=yes cache_valid_time=86400
@@ -9,9 +10,9 @@
   apt: name=ntp state=present
   become: yes
 
-- name: Ensure NTP is running.
-  service: name=ntp state=started enabled=yes
-  become: yes
+#- name: Ensure NTP is running.
+#  service: name=ntp state=started enabled=yes
+#  become: yes
 
 #- name: List ntp entries in /etc/ntp.conf
 #  shell: cat /etc/ntp.conf | grep '^server ' | cut -f2 -d' '
@@ -31,16 +32,17 @@
 
 # TODO: For some reason this reports status changed everytime the playbook is run!
 #  copy: content='{{ time_zone_config }}' 
-- name: Set timezone variables
-  copy: src=etc_timezone
-        dest=/etc/timezone
-        owner=root
-        group=root
-        mode=0644
-        backup=yes
+
+
+- name: set timezone to Africa/Cairo
+  timezone:
+    name: Africa/Cairo
   become: yes
+
+- name: Copy the ntp.conf template file
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
   notify:
-    - update timezone
+   - restart ntp
 
 # TODO: Add the time servers to the ntpd configuration file
 #- name: Ensure Orange timeservers are set
