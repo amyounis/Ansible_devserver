@@ -54,6 +54,18 @@
 #                     Set ulimits                        #
 ##########################################################
 
+- name: configure pam.d/common-session to enable limits at login
+  lineinfile:
+   dest: /etc/pam.d/common-session
+   line: session required pam_limits.so
+  become: yes
+
+- name: configure pam.d/common-session-noninteractive to enable limits at login
+  lineinfile:
+   dest: /etc/pam.d/common-session-noninteractive
+   line: session required pam_limits.so
+  become: yes
+
 - name: Set ulimits "memlock" - max locked-in-memory address space (KB)
   pam_limits: domain=root limit_type='-' limit_item=memlock value=unlimited backup=yes
   become: yes
@@ -94,15 +106,14 @@
 # this issue because Ubuntu, and mongodb is started by upstart not initd , then changing
 # these limits will not affect mongodb. As upstart does not read /etc/security config
 # also there is some limits that should not be changed like nproc (i think)
+
 #########################################################
 #                    Stetting locale                    #
 #########################################################
 
-- name: Generate en_US.UTF-8 locale
-  command: locale-gen en_US.UTF-8
+- name: generate locale
+  locale_gen: name=en_US.UTF-8 state=present
   become: yes
-# there is a module called locale_gen but i tried and it didnt change the file /etc/locale.gin
-# as it should do
 
 - name: Set locale "en_US.UTF-8"
   template: src=locale.j2 dest=/etc/default/locale
