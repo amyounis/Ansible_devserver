@@ -1,12 +1,14 @@
 ---
-# Install latest Oracle Java Jdk 7 and Jdk 8
-#############################################
+
+##################################################################################
+#               Install latest Oracle Java Jdk 7 and Jdk 8                       #
+##################################################################################
 
 - name: Update apt cache.
   apt: update_cache=yes cache_valid_time=86400
   become: yes
 
-- name: ensure required packages are installed for ppa repositories and for debconf
+- name: Ensure required packages are installed for ppa repositories and for debconf
   apt:
    name:
     - python-software-properties

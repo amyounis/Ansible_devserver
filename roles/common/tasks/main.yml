@@ -1,15 +1,16 @@
 ---
-#################################################################################
-#     Common role for installing common packages and set locale and ulimits     #
-#################################################################################
+
+##################################################################################
+#     Common role for installing common packages and set locale and ulimits      #
+##################################################################################
 
 - name: Update apt cache.
   apt: update_cache=yes cache_valid_time=86400
   become: yes
 
-######################################################################
-# this section for docker prerequisites and adding docker repository #
-######################################################################
+##################################################################################
+#       this section for docker prerequisites and adding docker repository       #
+##################################################################################
 
 - name: Install apt-transport-https for apt to be able to use repository over https
   apt: name=apt-transport-https state=present
@@ -50,17 +51,17 @@
    state: latest
   become: yes
 
-##########################################################
-#                     Set ulimits                        #
-##########################################################
+##################################################################################
+#                                   Set ulimits                                  #
+##################################################################################
 
-- name: configure pam.d/common-session to enable limits at login
+- name: Configure pam.d/common-session to enable limits at login
   lineinfile:
    dest: /etc/pam.d/common-session
    line: session required pam_limits.so
   become: yes
 
-- name: configure pam.d/common-session-noninteractive to enable limits at login
+- name: Configure pam.d/common-session-noninteractive to enable limits at login
   lineinfile:
    dest: /etc/pam.d/common-session-noninteractive
    line: session required pam_limits.so
@@ -82,36 +83,37 @@
   pam_limits: domain=root limit_type='-' limit_item=as value=unlimited backup=yes
   become: yes
 
-#        - core - limits the core file size (KB)
-#        - data - max data size (KB)
-#        - fsize - maximum filesize (KB)
-#        - memlock - max locked-in-memory address space (KB)
-#        - nofile - max number of open files
-#        - rss - max resident set size (KB)
-#        - stack - max stack size (KB)
-#        - cpu - max CPU time (MIN)
-#        - nproc - max number of processes
-#        - as - address space limit (KB)
-#        - maxlogins - max number of logins for this user
-#        - maxsyslogins - max number of logins on the system
-#        - priority - the priority to run user process with
-#        - locks - max number of file locks the user can hold
-#        - sigpending - max number of pending signals
-#        - msgqueue - max memory used by POSIX message queues (bytes)
-#        - nice - max nice priority allowed to raise to values: [-20, 19]
-#        - rtprio - max realtime priority
-#        - chroot - change root to directory (Debian-specific)
+#        - core - limits the core file size (KB)                                 #
+#        - data - max data size (KB)                                             #
+#        - fsize - maximum filesize (KB)                                         #
+#        - memlock - max locked-in-memory address space (KB)                     #
+#        - nofile - max number of open files                                     #
+#        - rss - max resident set size (KB)                                      #
+#        - stack - max stack size (KB)                                           #
+#        - cpu - max CPU time (MIN)                                              #
+#        - nproc - max number of processes                                       #
+#        - as - address space limit (KB)                                         #
+#        - maxlogins - max number of logins for this user                        #
+#        - maxsyslogins - max number of logins on the system                     #
+#        - priority - the priority to run user process with                      #
+#        - locks - max number of file locks the user can hold                    #
+#        - sigpending - max number of pending signals                            #
+#        - msgqueue - max memory used by POSIX message queues (bytes)            #
+#        - nice - max nice priority allowed to raise to values: [-20, 19]        #
+#        - rtprio - max realtime priority                                        #
+#        - chroot - change root to directory (Debian-specific)                   #
+#                                                                                #
+# Note: although /etc/security/limits.conf changed but, it has no effect even    #
+# after re-login this issue because Ubuntu, and mongodb is started by upstart    #
+# not initd , then changing these limits will not affect mongodb. As upstart     #
+# does not read /etc/security config, also there is some limits that should not  #
+# be changed like nproc (i think)                                                #
 
-# Note: although /etc/security/limits.conf changed but, it has no effect even after re-login
-# this issue because Ubuntu, and mongodb is started by upstart not initd , then changing
-# these limits will not affect mongodb. As upstart does not read /etc/security config
-# also there is some limits that should not be changed like nproc (i think)
+##################################################################################
+#                                Stetting locale                                 #
+##################################################################################
 
-#########################################################
-#                    Stetting locale                    #
-#########################################################
-
-- name: generate locale
+- name: Generate locale
   locale_gen: name=en_US.UTF-8 state=present
   become: yes
 

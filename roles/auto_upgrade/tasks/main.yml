@@ -1,21 +1,19 @@
 ---
-# this task for running aptitude -y safe-upgrade every day 1:00 AM
-###################################################################
+
+##################################################################################
+#        this task for running aptitude -y safe-upgrade every day 1:00 AM        #
+##################################################################################
 
 - name: Update apt cache.
   apt: update_cache=yes cache_valid_time=86400
   become: yes
 
-- name: ensure required packages are installed aptitude
-  apt:
-   name:
-    - python
-    - python3
-    - aptitude
-   state: latest
+- name: Ensure required packages are installed aptitude
+  apt: name=aptitude state=latest
   become: yes
 
-- cron:
+- name: Create Cron job to Run every day 1:00 AM
+  cron:
     name: auto_upgrade
     hour: 1
     job: "(/usr/bin/aptitude -y update && /usr/bin/aptitude -y safe-upgrade) 2>&1 >> /var/log/auto_update.log"
