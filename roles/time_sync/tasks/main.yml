@@ -12,13 +12,13 @@
   apt: name=ntp state=present
   become: yes
 
-- name: Set timezone to Africa/Cairo
+- name: Set timezone to time_zone_config
   timezone:
-    name: Africa/Cairo
+    name: "{{time_zone_config}}"
   become: yes
 
 - name: Copy the ntp.conf template file
-  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf owner=root mode=0644
   notify:
    - restart ntp
 

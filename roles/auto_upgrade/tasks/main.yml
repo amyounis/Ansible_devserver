@@ -7,16 +7,26 @@
 - name: Update apt cache.
   apt: update_cache=yes cache_valid_time=86400
   become: yes
+  tags: auto_upgrade
 
 - name: Ensure required packages are installed aptitude
   apt: name=aptitude state=latest
   become: yes
+  tags: auto_upgrade
+
+- name: Hold the Kernel from upgrade
+  dpkg_selections:
+   name: linux-image-{{ansible_kernel}}
+   selection: hold
+  become: yes
+  tags: auto_upgrade
 
 - name: Create Cron job to Run every day 1:00 AM
   cron:
     name: auto_upgrade
     hour: 1
-    job: "(/usr/bin/aptitude -y update && /usr/bin/aptitude -y safe-upgrade) 2>&1 >> /var/log/auto_update.log"
+    job: "(/usr/bin/aptitude -y update && /usr/bin/aptitude -y safe-upgrade && /usr/bin/aptitude autoclean) 2>&1 >> /var/log/auto_update.log"
     user: root
     cron_file: auto_upgrade
   become: yes
+  tags: auto_upgrade

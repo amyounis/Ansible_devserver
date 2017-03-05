@@ -1,7 +1,7 @@
 ---
 
 ##################################################################################
-#               Install latest Oracle Java Jdk 7 and Jdk 8                       #
+#                           Install Oracle Java Jdk                              #
 ##################################################################################
 
 - name: Update apt cache.
@@ -22,7 +22,11 @@
   become: yes
 
 - name: Autoaccept license for Java versions defined in playbook
-  debconf: name="oracle-{{item}}-installer" question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+  debconf:
+   name: "oracle-{{item}}-installer"
+   question: 'shared/accepted-oracle-license-v1-1'
+   value: 'true'
+   vtype: 'select'
   with_items: "{{javaversions}}"
   become: yes
 
@@ -31,9 +35,21 @@
   with_items: "{{javaversions}}"
   become: yes
 
-
 - name: Add JAVA UTF-8 Environment Variable
   lineinfile:
-    dest: /etc/environment
-    line: JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
+   dest: /etc/environment
+   regexp: ^JAVA_TOOL_OPTION
+   line: JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
+  become: yes
+
+- name: look for JAVA
+  shell: dirname $(dirname $(readlink -e $(which javac)))
+  register: result
+  become: yes
+
+- name: Set JAVA_HOME
+  lineinfile:
+   dest: /etc/environment
+   regexp: ^JAVA_HOME
+   line: JAVA_HOME={{result.stdout}}
   become: yes

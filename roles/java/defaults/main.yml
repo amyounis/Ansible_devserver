@@ -1,0 +1,6 @@
+---
+# defaults file for java role
+
+javaversions:
+    - java7
+    - java8

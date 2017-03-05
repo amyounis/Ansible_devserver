@@ -1,8 +1,5 @@
 ---
 # vars file for common
 
-#memlock_limit: unlimited
-#nofile_limit: 500000
-#nproc_limit: 32768
-#addrspace_limit: unlimited
+
 

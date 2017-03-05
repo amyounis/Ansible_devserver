@@ -68,46 +68,20 @@
   become: yes
 
 - name: Set ulimits "memlock" - max locked-in-memory address space (KB)
-  pam_limits: domain=root limit_type='-' limit_item=memlock value=unlimited backup=yes
+  pam_limits: domain=root limit_type='-' limit_item=memlock value={{memlock_limit}}
   become: yes
 
 - name: Set ulimits "nofile" - max number of open files
-  pam_limits: domain=root limit_type='-' limit_item=nofile value=unlimited backup=yes
+  pam_limits: domain=root limit_type='-' limit_item=nofile value={{nofile_limit}}
   become: yes
 
 - name: Set ulimits "nproc" - max number of processes
-  pam_limits: domain=root limit_type='-' limit_item=nproc value=unlimited backup=yes
+  pam_limits: domain=root limit_type='-' limit_item=nproc value={{nproc_limit}}
   become: yes
 
 - name: Set ulimits "as" - address space limit (KB)
-  pam_limits: domain=root limit_type='-' limit_item=as value=unlimited backup=yes
+  pam_limits: domain=root limit_type='-' limit_item=as value={{addrspace_limit}}
   become: yes
-
-#        - core - limits the core file size (KB)                                 #
-#        - data - max data size (KB)                                             #
-#        - fsize - maximum filesize (KB)                                         #
-#        - memlock - max locked-in-memory address space (KB)                     #
-#        - nofile - max number of open files                                     #
-#        - rss - max resident set size (KB)                                      #
-#        - stack - max stack size (KB)                                           #
-#        - cpu - max CPU time (MIN)                                              #
-#        - nproc - max number of processes                                       #
-#        - as - address space limit (KB)                                         #
-#        - maxlogins - max number of logins for this user                        #
-#        - maxsyslogins - max number of logins on the system                     #
-#        - priority - the priority to run user process with                      #
-#        - locks - max number of file locks the user can hold                    #
-#        - sigpending - max number of pending signals                            #
-#        - msgqueue - max memory used by POSIX message queues (bytes)            #
-#        - nice - max nice priority allowed to raise to values: [-20, 19]        #
-#        - rtprio - max realtime priority                                        #
-#        - chroot - change root to directory (Debian-specific)                   #
-#                                                                                #
-# Note: although /etc/security/limits.conf changed but, it has no effect even    #
-# after re-login this issue because Ubuntu, and mongodb is started by upstart    #
-# not initd , then changing these limits will not affect mongodb. As upstart     #
-# does not read /etc/security config, also there is some limits that should not  #
-# be changed like nproc (i think)                                                #
 
 ##################################################################################
 #                                Stetting locale                                 #
