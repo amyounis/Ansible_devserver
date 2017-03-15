@@ -1,0 +1,6 @@
+---
+# variables for host all
+
+Users:
+ - { name: dodo , password: $6$rounds=40000$aUKHPfSiD1m.mPqJ$c6UmobT2upBQj4Qi7dxdmSZWrK9Xt7gVZFe7tiROR3gglnRvNtWkOgDlI36dO6DSjRwWECU8/iFDxep9N0h/E/ , state: OK }
+ - { name: koko , password: $6$rounds=40000$J1GGxpJZFyFlZthz$/GD9dI2fUTDXX8D8u9dFBOczHPUAOPlCOgxSZaAdKI1iwOqWEEWaRkfoeeTB7X2dufjngvJqUS1CERsetF4dE0 , state: NO }
