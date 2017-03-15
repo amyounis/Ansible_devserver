@@ -1,0 +1,29 @@
+---
+
+##################################################################################
+#              Create users and put public keys in authorized keys               #
+##################################################################################
+
+- name: Ensure users are created
+  user: name={{item.name}} password={{item.password}}
+  with_items: "{{Users}}"
+  when: item.state == "OK"
+  become: yes
+  tags: users
+
+
+- name: put public key in authorized keys
+  authorized_key:
+   user: "{{item.name}}"
+   key: "{{ lookup('file', '{{item.name}}.pub') }}"
+  with_items: "{{Users}}"
+  when: item.state == "OK"
+  become: yes
+  tags: users
+
+- name: lock if user state not equal OK
+  shell: passwd -l {{item.name}}
+  with_items: "{{Users}}"
+  when: item.state != "OK"
+  become: yes
+  tags: users

@@ -1,0 +1,40 @@
+---
+
+##################################################################################
+#                        Set proxy environment variables                         #
+##################################################################################
+
+- name: Set proxy variables
+  lineinfile:
+    dest: /etc/environment
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^http_proxy', line: 'http_proxy=http://{{proxy_server}}:8080' }
+    - { regexp: '^https_proxy', line: 'https_proxy=http://{{proxy_server}}:8080' }
+    - { regexp: '^HTTP_PROXY', line: 'HTTP_PROXY=http://{{proxy_server}}:8080' }
+    - { regexp: '^HTTPS_PROXY', line: 'HTTPS_PROXY=http://{{proxy_server}}:8080' }
+  become: yes
+  tags: proxy
+
+##################################################################################
+#                           Set proxy settings for apt                           #
+##################################################################################
+
+- name: Set proxy settings for apt
+  lineinfile:
+    dest: /etc/apt/apt.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    create: yes
+  with_items:
+    - { regexp: '^Acquire::http::proxy', line: 'Acquire::http::proxy "http://{{proxy_server}}:8080";' }
+    - { regexp: '^Acquire::https::proxy', line: 'Acquire::https::proxy "http://{{proxy_server}}:8080";' }
+    - { regexp: '^Acquire::ftp::proxy', line: 'Acquire::ftp::proxy "ftp://{{proxy_server}}:8080";' }
+  become: yes
+  tags: proxy
+
+
+
+
+
