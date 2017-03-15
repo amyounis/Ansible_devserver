@@ -95,3 +95,9 @@
   template: src=locale.j2 dest=/etc/default/locale
   become: yes
 
+- name: Attach to last session or create new tmux at login
+  lineinfile:
+   dest: /home/abdo/.bashrc
+   line: /usr/bin/tmux attach || /usr/bin/tmux new
+  become: yes
+  tags: common

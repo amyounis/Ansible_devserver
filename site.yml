@@ -10,12 +10,12 @@
   tasks:
 
   roles:
-   - proxy
+#   - proxy
    - common
-   - auto_upgrade
-   - java
-   - time_sync
-   - users
+#   - auto_upgrade
+#   - java
+#   - time_sync
+#   - users
 
 #  environment:
 #    http_proxy: http://proxy.example.com:8080
