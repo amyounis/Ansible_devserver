@@ -7,7 +7,6 @@
 - name: Ensure users are created
   user: name={{item.name}} password={{item.password}}
   with_items: "{{Users}}"
-  when: item.state == "OK"
   become: yes
   tags: users
 
@@ -27,3 +26,4 @@
   when: item.state != "OK"
   become: yes
   tags: users
+

@@ -95,9 +95,15 @@
   template: src=locale.j2 dest=/etc/default/locale
   become: yes
 
+##################################################################################
+#                           make tmux run at login                               #
+##################################################################################
+
 - name: Attach to last session or create new tmux at login
   lineinfile:
-   dest: /home/abdo/.bashrc
-   line: /usr/bin/tmux attach || /usr/bin/tmux new
+   dest: /home/{{item.name}}/.bashrc
+   line: /usr/bin/tmux attach -t default || /usr/bin/tmux new -s default
+  with_items: "{{Users}}"
   become: yes
-  tags: common
+  tags: users
+

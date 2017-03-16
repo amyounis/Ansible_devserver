@@ -1,0 +1,44 @@
+---
+
+##################################################################################
+#                           linuxbrew installation                               #
+##################################################################################
+
+- name: Install linuxbrew prerequisites 
+  apt:
+   name:
+    - curl 
+    - git 
+    - python-setuptools
+    - ruby
+   state: latest
+  become: yes
+  tags: linuxbrew
+
+- name: Copy linuxbrew_install.rb script to users home irectory
+  copy:
+   src: "{{ role_path }}/files/linuxbrew_install.rb"
+   dest: /home/{{item.name}}/linuxbrew_install.rb
+   owner: "{{item.name}}"
+   group: "{{item.name}}"
+  with_items: "{{Users}}"
+  when: 
+  become: yes 
+  tags: linuxbrew
+
+- name: Install linuxbrew on users
+  command: ruby linuxbrew_install.rb creates=/home/{{item.name}}/.linuxbrew/bin/brew 
+  become: yes
+  become_user: "{{item.name}}"
+  with_items: "{{Users}}"
+  tags: linuxbrew
+
+- name: Add linuxbrew bins in users $PATH
+  lineinfile:
+   dest: /home/{{item.name}}/.profile
+   line: export PATH="$HOME/.linuxbrew/bin:$PATH
+  with_items: "{{Users}}"
+  become: yes
+  tags: linuxbrew
+
+
